@@ -1,57 +1,70 @@
 --[[
 	Made by Pulsarnova (A.k.a. BangoutBoy)
 	edited by @vietnamricefarmerz / @_kuronjie
-	Version 65
+	Version 66
 ]]
 
 local rgb = Color3.fromRGB
 local AtmoSphere = {
+	-- Performance
 	MaxRefreshRate = 1/60,
-	
-	AltitudeOffset = 0,
-	AtmosphereColor = rgb(115, 180, 255),
-	AtmosphereReflectionColor = rgb(42, 133, 198),
-	AtmosphereSunsetColor = rgb(171, 213, 255),
-	AtmosphereThickness = 1,
-	AtmosphereTransparency = 1,
-	AtmosphereExtinctionColor = rgb(255, 100, 0),
-	AstronomicalTwilightAtmosphericExtinctionColor = rgb(60, 60, 60),
-	InnerAtmosphericExtinctionColor = rgb(255, 85, 0),
-	NauticalInnerAtmosphericExtinctionColor = rgb(150, 125, 50),
-	NauticalTwlightAtmosphericExtinctionColor = rgb(255, 100, 50),
-	SunsideAtmosphericExtinctionColor = rgb(255, 20, 0),
-	BeltOfVenusColor = rgb(0, 13, 25),
-	DistantSurfaceColor = rgb(45, 118, 255),
+
+	-- Colors
+	AtmosphereColor = Color3.fromRGB(115, 180, 255),
+	AtmosphereReflectionColor = Color3.fromRGB(42, 133, 198),
+	AtmosphereSunsetColor = Color3.fromRGB(171, 213, 255),
+	AtmosphereExtinctionColor = Color3.fromRGB(255, 100, 0),
+	AstronomicalTwilightAtmosphericExtinctionColor = Color3.fromRGB(60, 60, 60),
+	InnerAtmosphericExtinctionColor = Color3.fromRGB(255, 85, 0),
+	NauticalInnerAtmosphericExtinctionColor = Color3.fromRGB(150, 125, 50),
+	NauticalTwilightAtmosphericExtinctionColor = Color3.fromRGB(255, 100, 50),
+	SunsideAtmosphericExtinctionColor = Color3.fromRGB(255, 20, 0),
+	BeltOfVenusColor = Color3.fromRGB(0, 13, 25),
+	DistantSurfaceColor = Color3.fromRGB(45, 118, 255),
+
+	-- Airglow
 	EnableAirglow = true,
-	AirglowColor = rgb(0, 255, 0),
-	AirglowTransparency = rgb(0.93),
+	AirglowColor = Color3.fromRGB(0, 255, 0),
+	AirglowTransparency = 0.93,
+
+	-- Lighting Changes
 	EnableEnvironmentalLightingChanges = true,
-	DaytimeSunlightColor = rgb(255, 255, 255),
+	DaytimeSunlightColor = Color3.fromRGB(255, 255, 255),
 	NightBrightness = 0,
 	OutdoorAmbientBrightnessDay = 128,
 	OutdoorAmbientBrightnessNight = 48,
-	SunlightBrightness = 5, 
-	SunriseSunlightColor = rgb(255, 140, 20),
-	EnableGroundAtmosphere = true,
-	GroundAtmosphereTransparency = 0.8,
+	SunlightBrightness = 5,
+	SunriseSunlightColor = Color3.fromRGB(255, 140, 20),
+
+	-- Moon
 	EnableMoon = true,
 	MoonApparentDiameter = 31.6,
 	MoonTexture = "rbxassetid://10855868393",
+
+	-- Sun
 	EnableSun = true,
-	SunApparentDiamater = 31.983,
-	SunAtmosphericExtinctionColor = rgb(255, 140, 50),
-	SunAtmosphericExtinctionIntermediateColor = rgb(255, 200, 80),
+	SunApparentDiameter = 31.983,
+	SunAtmosphericExtinctionColor = Color3.fromRGB(255, 140, 50),
+	SunAtmosphericExtinctionIntermediateColor = Color3.fromRGB(255, 200, 80),
 	SunBrightness = 1,
 	SunTemp = 5505,
 	SunshineTexture = "rbxassetid://6196665106",
-	ThreeDimensionalSunAtmosphericExtinctionColor = rgb(255, 20, 0),
+	ThreeDimensionalSunAtmosphericExtinctionColor = Color3.fromRGB(255, 20, 0),
 	EnableSunsetScattering = true,
+
+	-- Planet
 	PlanetTexture = "rbxassetid://5079554320",
 	PlanetTextureNight = "rbxassetid://5088333693",
 	PlanetTransparency = 0.421,
+	AltitudeOffset = 0,
 	Scale = 2.3,
+	
+	-- Ground Atmosphere
+	EnableGroundAtmosphere = true,
+	GroundAtmosphereTransparency = 0.8,
+
+	-- Fog
 	FogEndRatio = 1,
-	AtmosphereMetadata = {},
 }
 
 local Lighting = game:GetService("Lighting")
@@ -85,7 +98,7 @@ function AtmoSphere:GetScale()
 	return self.Scale
 end
 
--- // global variables
+-- // Fetch
 local ScaleFactor = AtmoSphere:GetScale() * -1
 local meta = AtmoSphere:GetMeta()
 local x
@@ -138,8 +151,6 @@ function AtmoSphere:Init()
 	meta.Mesh.MeshId = "rbxassetid://5077225120"
 	meta.Mesh.Scale = Vector3.new(7600, 3000, 7600)
 	meta.Mesh.TextureId = "http://www.roblox.com/asset/?ID=2013298"
-	
-	self.AtmosphereApparentHeight = 5.5
 	
 	-- Sky
 	meta.Sky = Instance.new("Sky", Lighting)
@@ -243,8 +254,11 @@ function AtmoSphere:Init()
 	meta.BottomAtmosphereMesh.VertexColor = Vector3.new((115/255)*2,(152/255)*2,2)
 	meta.BottomAtmosphereMesh.Scale = Vector3.new(400,3000,3000)
 	
-	-- // lighting stuff
+	-- lighting
 	Lighting.EnvironmentDiffuseScale = 0
+	self.LightEmissionEquation = 1
+	self.OutdoorAmbientBrightnessEquation = 128
+	
 	-- fog
 	Lighting.FogColor = Color3.new(115/255, 152/255, 255/255)
 	Lighting.FogEnd = 100000
@@ -256,26 +270,31 @@ function AtmoSphere:Init()
 	self.EarthMeshEquation = 100000
 	self.EarthTransparency = self.PlanetTransparency
 	
+	-- extinction
 	self.ExtinctionTransparencyMultiplier = 1
-	self.LightEmissionEquation = 1
 	self.ExtinctionTransparencyEquation = 0
 	self.ExtinctionColorEquation = 255
 	self.ExtinctionWidthEquation = 40000
 	self.ExtinctionOrientationEquation = 81
-	self.OutdoorAmbientBrightnessEquation = 128
-	self.AirglowTransparency = 0
 	self.ShowTerminator = 1
-	self.FindServerClockTime = workspace:FindFirstChild("ServerClockTime")
-	self.ClockTimeExists = false
-	self.HorizonElevationSunsetDifference10 = 10
-	self.InitialTime = Lighting.ClockTime
-	self.InitialGL = Lighting.GeographicLatitude
 	
+	-- misc
+	self.AirglowTransparency = 0
+	self.HorizonElevationSunsetDifference10 = 10
+	self.AtmosphereApparentHeight = 5.5
+	
+	-- sun
 	self.SunBrightness = 5
 	self.SunColor = Color3.fromRGB(255, 255, 255)
 	self.SunOffset = Vector2.new(0, 0)
+
+	-- clocktime & axial tilt
+	self.InitialTime = Lighting.ClockTime
+	self.InitialGL = Lighting.GeographicLatitude
 	
 	-- clock
+	self.FindServerClockTime = workspace:FindFirstChild("ServerClockTime")
+	self.ClockTimeExists = false
 	if self.FindServerClockTime then
 		self.ClockTimeExists = true
 	else
@@ -302,6 +321,7 @@ function AtmoSphere:Pause()
 		self.UpdateConnection:Disconnect()
 		self.UpdateConnection = nil
 	end
+	RunService:UnbindFromRenderStep("Sunshine")
 end
 
 function AtmoSphere:Resume()
@@ -310,273 +330,330 @@ function AtmoSphere:Resume()
 	end
 	self.Running = true
 	self.UpdateConnection = AtmoSphere:Connect("Update", RunService.Heartbeat)
+	RunService:BindToRenderStep("Sunshine", Enum.RenderPriority.Last, function(deltaTime)
+		self:UpdateSun(deltaTime)
+	end)
 end
 
--- Replacement Sun. Why? SunRays can't pass through opaque parts and the atmosphere has to be opaque to prevent any transparency glitches.
-function AtmoSphere:Sun(character)
+function AtmoSphere:Init()
+	if self.Initialized then
+		return
+	end
+	self.Initialized = true
+	AtmoSphere:InitSun()
+	AtmoSphere:Resume()
+end
+
+-- sun obj
+function AtmoSphere:InitSun()
+	-- sun texture gui
+	meta.SunTextureGui = Instance.new("ScreenGui", Player.PlayerGui)
+	meta.SunTextureGui.DisplayOrder = -1 
+	meta.SunTextureGui.Name = "Sun"
+
+	meta.SunTexture = Instance.new("ImageLabel", meta.SunTextureGui)
+	meta.SunTexture.Image = self.SunshineTexture
+	meta.SunTexture.BackgroundTransparency = 1
+	meta.SunTexture.Size = UDim2.new(0,1000, 0, 1000)
+	meta.SunTexture.AnchorPoint = Vector2.new(0.5,0.5)
+	meta.SunTexture.ZIndex = 1
+	
+	meta.SunTexture2 = Instance.new("ImageLabel", meta.SunTextureGui)
+	meta.SunTexture2.Image = "rbxassetid://5200654205"
+	meta.SunTexture2.BackgroundTransparency = 1
+	meta.SunTexture2.Size = UDim2.new(0,(2100/Camera.FieldOfView),0,(2100/Camera.FieldOfView))
+	meta.SunTexture2.AnchorPoint = Vector2.new(0.5,0.5)
+	meta.SunTexture2.ZIndex = 2
+	
+	meta.SunTexture3 = meta.SunTexture:Clone()
+	meta.SunTexture3.Parent = meta.SunTextureGui
+	
+	self.IsObstructed = false
+	-- static variables
+	self.SunOffset = Vector2.new(0, 0)
+	self.AltitudeSunTransparencyFadeRate = math.clamp(-0.00000133333333333 * x + 0.75666666666666, 0.55, 0.75)
+	self.SunApparentDiameterRatio = self.SunApparentDiameter / 31.983
+end
+
+function AtmoSphere:UpdateSun(deltaTime: number)
+	--[[
+	RunService:UnbindFromRenderStep("Sunshine")
+	RunService:BindToRenderStep("Sunshine", Enum.RenderPriority.Last.Value, function()
+	]]
+	-- throttle
 	local now = os.clock()
 	if (now - self.LastUpdate) + (1 / math.random(60, 120)) <= deltaTime * 3 + self.MaxRefreshRate then
 		return
 	end
 	self.LastUpdate = now
-	local SunTextureGui;
-	do
-		for i,v in pairs(script.Parent:GetChildren()) do
-			if v:IsA("ScreenGui") then
-				SunTextureGui = v
-				break
-			end
-		end
-		if not SunTextureGui then 
-			SunTextureGui = Instance.new("ScreenGui", game.Players.LocalPlayer.PlayerGui)
-			SunTextureGui.DisplayOrder = -1 
-			SunTextureGui.Name = "Sun"
-		end
+
+	if self.EnableSun then
+		meta.SunTextureGui.Enabled = true
+		meta.Sky.SunTextureId = "rbxasset://sky/sun.jpg"
+	else
+		meta.SunTextureGui.Enabled = false
+		meta.Sky.SunTextureId = ""
 	end
-	local SunTexture = Instance.new("ImageLabel",SunTextureGui)
-	SunTexture.Image = script.Customize.EnableSun.SunshineTexture.Value
-	SunTexture.BackgroundTransparency = 1
-	SunTexture.Size = UDim2.new(0,1000,0,1000)
-	SunTexture.AnchorPoint = Vector2.new(0.5,0.5)
-	SunTexture.ZIndex = 1
-	local IsObstructed = false
-	local SunTexture2 = Instance.new("ImageLabel",SunTextureGui)
-	SunTexture2.Image = "rbxassetid://5200654205"
-	SunTexture2.BackgroundTransparency = 1
-	SunTexture2.Size = UDim2.new(0,(2100/Camera.FieldOfView),0,(2100/Camera.FieldOfView))
-	SunTexture2.AnchorPoint = Vector2.new(0.5,0.5)
-	SunTexture2.ZIndex = 2
-	local SunTexture3 = SunTexture:Clone()
-	SunTexture3.Parent = SunTextureGui
-	SunOffset = Vector2.new(0, 0)
+	if not x then
+		x = (Camera.CFrame.Y + self.AltitudeOffset) * ScaleFactor
+	end
+	local ignore = {}
+	-- sun cframe
+	self.SunDirectionV = Lighting:GetSunDirection()
+	local sunPosition = Camera.CFrame.Position + self.SunDirectionV * 999
+	
+	-- screen & camera
+	local screenPosition, isVisible = Camera:WorldToScreenPoint(sunPosition)
+	local CamToSun = Ray.new(Camera.CFrame.Position, self.SunDirectionV * 999)
+	local CamZoomDistance = (Camera.Focus.Position - Camera.CFrame.Position).Magnitude
+	self.CamToSunDirection = (self.SunDirectionV * 999) - Camera.CFrame.LookVector
+	self.HorizonElevation = -math.deg(math.acos(20925656.2/(20925656.2+x)))
+	self.SunElevation = math.deg(
+		math.atan((self.CamToSunDirection.y)
+			/math.sqrt(self.CamToSunDirection.x^2+self.amToSunDirection.z^2)
+		))
+	self.HorizonElevationSunsetDifference = self.SunElevation-self.HorizonElevation
+	
+	-- sun colors
+	local SunExtinctionColor = rgb(
+		self.SunAtmosphericExtinctionColor.R*255, -- SunExtinctionColorR
+		self.SunAtmosphericExtinctionColor.G*255, -- SunExtinctionColorG
+		self.SunAtmosphericExtinctionColor.B*255  -- SunExtinctionColorB
+	)
+	local SunExtinctionColorIntermediate = rgb(
+		self.SunExtinctionColorIntermediate.R*255, -- SunExtinctionColorIntermediateR
+		self.SunExtinctionColorIntermediate.G*255, -- SunExtinctionColorIntermediateG
+		self.SunExtinctionColorIntermediate.B*255  -- SunExtinctionColorIntermediateB
+	)
+	
+	local SunsetFOVTransparencyScale = 1 - math.clamp(
+		((workspace.CurrentCamera.FieldOfView - 5) / 5 + 1) 
+		* (self.HorizonElevationSunsetDifference ^ 3 / 10), 0, 1)
+	local H1 = 6*(2^(-x/500000))
+	
+	local HorizonElevationSunsetDifference10
+	if self.HorizonElevationSunsetDifference <= 0 then
+		HorizonElevationSunsetDifference10 = 0
+	elseif self.HorizonElevationSunsetDifference > 0 
+		and self.HorizonElevationSunsetDifference <= H1 then
+		HorizonElevationSunsetDifference10 = self.HorizonElevationSunsetDifference
+	elseif self.HorizonElevationSunsetDifference > H1 then
+		HorizonElevationSunsetDifference10 = H1
+	end
+	
+	local HorizonElevationSunsetDifference10Ratio = HorizonElevationSunsetDifference10 / H1
+	local HorizonElevationSunsetDifference10Ratio3 = (math.clamp(HorizonElevationSunsetDifference10, 0, 2) * 3) / H1
+	local HorizonElevationSunsetDifference10Ratio1_5 = (math.clamp(HorizonElevationSunsetDifference10, 0, 1) * 6) / H1
 
-	Run:UnbindFromRenderStep("Sunshine")
-	Run:BindToRenderStep("Sunshine", Enum.RenderPriority.Last.Value, function()
+	table.insert(ignore, meta.Atmosphere)
+	if CamZoomDistance <= 1.1 then -- Check if player is in first person.
+		table.insert(ignore,Character)
+	elseif CamZoomDistance > 1.1 then
+		ignore[Character] = nil
+	end
 
-		if script.Customize.EnableSun.Value == true then
-			SunTextureGui.Enabled = true
-			Sky.SunTextureId = "rbxasset://sky/sun.jpg"
+	-- Checks if something is blocking the Sun
+	local Obstructed, hitPosition = workspace:FindPartOnRayWithIgnoreList(CamToSun,ignore)
+	meta.SunTexture.Position = UDim2.new(0,screenPosition.x,0,screenPosition.y)
+	meta.SunTexture2.Position = UDim2.new(0,screenPosition.x,0,screenPosition.y)
+	meta.SunTexture3.Position = UDim2.new(0,screenPosition.x,0,screenPosition.y)
+
+	if Obstructed then 
+		self.IsObstructed = true
+	else
+		self.IsObstructed = false
+	end
+
+	if isVisible then -- Converts the Sun's location in the sky to position coordinates of the shine gui.
+		meta.SunTexture.ImageTransparency = 1 
+		- math.clamp(
+			((2 - (2.6111111111111 * self.AltitudeSunTransparencyFadeRate))
+				* 30 * (HorizonElevationSunsetDifference10Ratio3 + 0.55
+				- self.AltitudeSunTransparencyFadeRate - SunsetFOVTransparencyScale)), 0, 1
+		)
+		
+		meta.SunTexture:TweenSize(
+			UDim2.new(
+				0, 100 + HorizonElevationSunsetDifference10Ratio * 900
+					*self.SunBrightness
+					*(-((Camera.FieldOfView-70)/200)+1),
+				
+				0, 100 + HorizonElevationSunsetDifference10Ratio 
+					* 900*self.SunBrightness
+					*(-((Camera.FieldOfView-70)/200)+1)
+			),
+			Enum.EasingDirection.Out,
+			Enum.EasingStyle.Quad,
+			0.1,
+			true
+		)
+		
+		meta.SunTexture2.ImageTransparency = 1 - math.clamp(
+			((2 - (2.6111111111111 * self.AltitudeSunTransparencyFadeRate))
+				* 30 * (HorizonElevationSunsetDifference10Ratio1_5 + 0.55
+					- self.AltitudeSunTransparencyFadeRate - SunsetFOVTransparencyScale)),
+			0,
+			1
+		)
+		
+		meta.SunTexture2:TweenSize(
+			UDim2.new(
+				0, ((2.5*Camera.ViewportSize.Y
+					*self.SunApparentDiameterRatio)
+					/Camera.FieldOfView)*self.SunBrightness,
+				0, ((2.5*Camera.ViewportSize.Y
+					*self.SunApparentDiameter/31.9)
+					/Camera.FieldOfView)*self.SunBrightness
+			),
+			Enum.EasingDirection.Out,
+			Enum.EasingStyle.Quad,
+			0.1,
+			true
+		)
+		meta.Sun3D.SunsetLight.Light.ImageTransparency = HorizonElevationSunsetDifference10Ratio
+		meta.Sun3D.Mesh.Scale = Vector3.new(
+			12.25,
+			10.5 + (1.75 * HorizonElevationSunsetDifference10Ratio),
+			12.25
+		) * self.SunApparentDiameterRatio
+		if self.IsObstructed == true then
+			meta.SunTexture:TweenSize(UDim2.new(0,-5,0,-5),Enum.EasingDirection.Out,Enum.EasingStyle.Quad,0.1,true)
+			meta.SunTexture2:TweenSize(UDim2.new(0,-5,0,-5),Enum.EasingDirection.Out,Enum.EasingStyle.Quad,0.1,true)
+		elseif self.SunElevation <= self.HorizonElevation then
+			meta.SunTexture:TweenSize(UDim2.new(0,-5,0,-5),Enum.EasingDirection.Out,Enum.EasingStyle.Quad,0.1,true)
+			meta.SunTexture2:TweenSize(UDim2.new(0,-5,0,-5),Enum.EasingDirection.Out,Enum.EasingStyle.Quad,0.1,true)
+		elseif self.HorizonElevation ~= self.HorizonElevation then
+			meta.SunTexture:TweenSize(UDim2.new(0,-5,0,-5),Enum.EasingDirection.Out,Enum.EasingStyle.Quad,0.1,true)
+			meta.SunTexture2:TweenSize(UDim2.new(0,-5,0,-5),Enum.EasingDirection.Out,Enum.EasingStyle.Quad,0.1,true)
+		end
+		meta.SunTexture3.Size = UDim2.new(0, meta.SunTexture.Size.X.Offset / 2, 0, meta.SunTexture.Size.Y.Offset / 2)
+		meta.SunTexture3.ImageColor3 = Color3.new(
+			meta.SunTexture.ImageColor3.R * 1.5,
+			meta.SunTexture.ImageColor3.G * 1.5,
+			meta.SunTexture.ImageColor3.B * 1.5
+		)
+		meta.SunTexture3.Position = meta.SunTexture.Position
+		meta.SunTexture3.Rotation = meta.SunTexture.Rotation
+		meta.SunTexture3.ImageTransparency = meta.SunTexture.ImageTransparency
+	else
+		meta.SunTexture:TweenSize(UDim2.new(0,-5,0,-5),Enum.EasingDirection.Out,Enum.EasingStyle.Quad,0.1,true)
+		meta.SunTexture2:TweenSize(UDim2.new(0,-5,0,-5),Enum.EasingDirection.Out,Enum.EasingStyle.Quad,0.1,true)
+		meta.SunTexture3.Size = meta.SunTexture.Size
+	end
+
+	if meta.SunTexture.Size.X.Offset <= 0 then -- To ensure the Sun is completely invisible when player is facing away from the Sun.
+		meta.SunTexture.Visible = false
+		meta.SunTexture2.Visible = false
+		meta.SunTexture3.Visible = false
+	else
+		meta.SunTexture.Visible = true
+		meta.SunTexture2.Visible = true
+		meta.SunTexture3.Visible = true
+	end
+
+	-- Sun Temperature
+	local TempValue = math.clamp(self.SunTemp, 2001, math.huge)
+	if not self.EnableSunsetScattering then
+		TempValue = self.SunTemp
+	end
+	local Temp = (TempValue + 1095) / 100
+	--[[if TempValue <= 0 then
+		self.SunColor = rgb(
+			255,
+			76,
+			0
+		)
+	elseif TempValue > 0 and TempValue <= 1000 then
+		self.SunColor = rgb(
+			255,
+			99.4708025861*math.log(Temp)-161.1195681661,
+			0
+		)
+	elseif TempValue > 1000 and TempValue <= 2000 then
+		self.SunColor = rgb(
+			255,
+			104.49216199393888*math.log(Temp-2)-0.44596950469579133*Temp-155.25485562709179,
+			0
+		)]]
+	if TempValue > 2000 and TempValue <= 6600 then
+		self.SunColor = rgb(
+			255,
+			104.49216199393888*math.log(Temp-2)-0.44596950469579133*Temp-155.25485562709179,
+			115.67994401066147*math.log(Temp-10)+0.8274096064007395*Temp-254.76935184120902
+		)
+	--[[elseif TempValue > 6600 and TempValue <= 40000 then
+		self.SunColor = rgb(
+			-40.25366309332127*math.log(Temp-55)+0.114206453784165*Temp+351.97690566805693,
+			-28.0852963507957*math.log(Temp-50)+0.07943456536662342*Temp+325.4494125711974,
+			255
+		)
+	elseif TempValue > 40000 then
+		self.SunColor = rgb(
+			162,
+			192,
+			255
+		)]]
+	end
+	local SunR, SunG, SunB = self.SunColor.R, self.SunColor.G, self.SunColor.B
+	
+	local H2 = (3*(2^(-x/500000)))
+	if script.Customize.EnableSunsetScattering.Value then
+		local IntermediateColor = Color3.new(
+			math.clamp(((((SunR-math.clamp(SunExtinctionColorIntermediate.R, 0, SunR - 1))/(H2*(2^(-x/500000))))
+				*(math.clamp(HorizonElevationSunsetDifference10, H2, H2 * 2)-H2))+SunExtinctionColorIntermediate.R)/255, 0, 1),
+			math.clamp(((((SunG-math.clamp(SunExtinctionColorIntermediate.G, 0, SunG - 1))/(H2*(2^(-x/500000))))
+				*(math.clamp(HorizonElevationSunsetDifference10, H2, H2 * 2)-H2))+SunExtinctionColorIntermediate.G)/255, 0, 1),
+			math.clamp(((((SunB-math.clamp(SunExtinctionColorIntermediate.B, 0, SunB - 1))/(H2*(2^(-x/500000))))
+				*(math.clamp(HorizonElevationSunsetDifference10, H2, H2 * 2)-H2))+SunExtinctionColorIntermediate.B)/255, 0, 1)
+		)
+		meta.SunTexture.ImageColor3 = Color3.new(
+			(((((IntermediateColor.R*255)-SunExtinctionColor.R)/(6*(2^(-x/500000))))*HorizonElevationSunsetDifference10)+SunExtinctionColor.R)/255,
+			(((((IntermediateColor.G*255)-SunExtinctionColor.G)/(6*(2^(-x/500000))))*HorizonElevationSunsetDifference10)+SunExtinctionColor.G)/255,
+			(((((IntermediateColor.B*255)-SunExtinctionColor.B)/(6*(2^(-x/500000))))*HorizonElevationSunsetDifference10)+SunExtinctionColor.B)/255
+		)
+	else
+		meta.SunTexture.ImageColor3 = Color3.new(
+			(((SunR-SunExtinctionColor.R)/(6*(2^(-x/500000)))*HorizonElevationSunsetDifference10)+SunExtinctionColor.R)/255,
+			((((SunG-SunExtinctionColor.G)/(6*(2^(-x/500000))))*HorizonElevationSunsetDifference10)+SunExtinctionColor.G)/255,
+			((((SunB-SunExtinctionColor.B)/(6*(2^(-x/500000))))*HorizonElevationSunsetDifference10)+SunExtinctionColor.B)/255
+		)
+	end
+	meta.SunTexture.Rotation = -(screenPosition.x-Camera.ViewportSize.X/2)/100 -- Sunshine rotation as a function of the screen's x-axis.
+
+	-- 3D SUNSET
+	if Lighting.ClockTime < 12 then
+		meta.Sun3D.SunsetLight.ExtentsOffsetWorldSpace = Vector3.new(5, 0, 0)
+	else
+		meta.Sun3D.SunsetLight.ExtentsOffsetWorldSpace = Vector3.new(-5, 0, 0)
+	end
+	
+	local AboveHorizon = self.HorizonElevationSunsetDifference > -2
+	if x > 5000 then
+		AboveHorizon = self.HorizonElevationSunsetDifference > 0
+	elseif x > 1000 and x <= 5000 then
+		AboveHorizon = self.HorizonElevationSunsetDifference > -0.5
+	end
+	if self.EnableSun then
+		if AboveHorizon and self.HorizonElevationSunsetDifference < H1 then
+			meta.Sun3D.Position = Camera.CFrame.Position
+			meta.Sun3D.Mesh.Offset = Vector3.new(70000, 70000, 70000) * self.SunDirectionV
 		else
-			SunTextureGui.Enabled = false
-			Sky.SunTextureId = ""
+			meta.Sun3D.Position = Vector3.new(0, -200000, 0)
+			meta.Sun3D.Mesh.Offset = meta.Sun3D.Position
 		end
+		meta.Sun3D.SunsetLight.StudsOffsetWorldSpace = meta.Sun3D.Mesh.Offset
+		meta.Sun3D.SunsetLight.Brightness = math.clamp(400 - (x / 28), 40, 400)
+		meta.Sun3D.SunsetLight.Size = UDim2.new(
+			10000 * self.SunBrightness, 
+			0, math.clamp((-x / 16) + 10000, 4000, 10000) 
+				* self.SunBrightness, 0
+		)
+		meta.Sun3D.SunsetLight.Light.ImageColor3 = script.Customize.EnableSun.ThreeDimensionalSunAtmosphericExtinctionColor.Value
+	else
+		meta.Sun3D.Position = Camera.CFrame.Position - Vector3.new(0, 100000, 0)
+	end
+end
 
-		local ScaleFactor = (script.Customize.Scale.Value)^-1
-		local x = (Camera.CFrame.Position.Y+script.Customize.AltitudeOffset.Value)*ScaleFactor
-		local SunBrightness = script.Customize.EnableSun.SunBrightness.Value
-		local SunDirectionV = game.Lighting:GetSunDirection()
-		local sunPosition = Camera.CoordinateFrame.p+SunDirectionV * 999
-		local screenPosition, isVisible = Camera:WorldToScreenPoint(sunPosition)
-		local CamToSun = Ray.new(Camera.CoordinateFrame.p, SunDirectionV * 999)
-		local CamToSunDirection = (SunDirectionV * 999)-Camera.CFrame.LookVector
-		local ignore = {}
-		local SunElevation = math.deg(math.atan((CamToSunDirection.y)/math.sqrt(CamToSunDirection.x^2+CamToSunDirection.z^2)))
-		local HorizonElevation = -math.deg(math.acos(20925656.2/(20925656.2+x)))
-		local CamZoomDistance = (Camera.Focus.Position - Camera.CFrame.Position).Magnitude
-		local HorizonElevationSunsetDifference = SunElevation-HorizonElevation
-		local ApparentDiameter = script.Customize.EnableSun.SunApparentDiameter.Value
-		local SunExtinctionColorR = script.Customize.EnableSun.SunAtmosphericExtinctionColor.Value.R*255
-		local SunExtinctionColorG = script.Customize.EnableSun.SunAtmosphericExtinctionColor.Value.G*255
-		local SunExtinctionColorB = script.Customize.EnableSun.SunAtmosphericExtinctionColor.Value.B*255
-		local SunExtinctionColorIntermediateR = script.Customize.EnableSun.SunAtmosphericExtinctionIntermediateColor.Value.R*255
-		local SunExtinctionColorIntermediateG = script.Customize.EnableSun.SunAtmosphericExtinctionIntermediateColor.Value.G*255
-		local SunExtinctionColorIntermediateB = script.Customize.EnableSun.SunAtmosphericExtinctionIntermediateColor.Value.B*255
-		local SunsetFOVTransparencyScale = 1 - math.clamp(((workspace.CurrentCamera.FieldOfView - 5) / 5 + 1) 
-			* (HorizonElevationSunsetDifference ^ 3 / 10), 0, 1)
-		local H1 = 6*(2^(-x/500000))
-
-		if HorizonElevationSunsetDifference <= 0 then
-			HorizonElevationSunsetDifference10 = 0
-		elseif HorizonElevationSunsetDifference > 0 and HorizonElevationSunsetDifference <= H1 then
-			HorizonElevationSunsetDifference10 = HorizonElevationSunsetDifference
-		elseif HorizonElevationSunsetDifference > H1 then
-			HorizonElevationSunsetDifference10 = H1
-		end
-		local HorizonElevationSunsetDifference10Ratio = HorizonElevationSunsetDifference10 / H1
-		local HorizonElevationSunsetDifference10Ratio3 = (math.clamp(HorizonElevationSunsetDifference10, 0, 2) * 3) / H1
-		local HorizonElevationSunsetDifference10Ratio1_5 = (math.clamp(HorizonElevationSunsetDifference10, 0, 1) * 6) / H1
-
-		table.insert(ignore,Atmosphere)
-		if CamZoomDistance <= 1.1 then -- Check if player is in first person.
-			table.insert(ignore,Character)
-		elseif CamZoomDistance > 1.1 then
-			ignore[Character] = nil
-		end
-
-		-- Checks if something is blocking the Sun
-		local Obstructed, hitPosition = workspace:FindPartOnRayWithIgnoreList(CamToSun,ignore)
-		SunTexture.Position = UDim2.new(0,screenPosition.x,0,screenPosition.y)
-		SunTexture2.Position = UDim2.new(0,screenPosition.x,0,screenPosition.y)
-		SunTexture3.Position = UDim2.new(0,screenPosition.x,0,screenPosition.y)
-
-		if Obstructed then 
-			IsObstructed = true
-		else
-			IsObstructed = false
-		end
-
-		if isVisible then -- Converts the Sun's location in the sky to position coordinates of the shine gui.
-			local AltitudeSunTransparencyFadeRate = math.clamp(-0.00000133333333333 * x + 0.75666666666666, 0.55, 0.75)
-			SunTexture.ImageTransparency = 1 - math.clamp(
-				((2 - (2.6111111111111 * AltitudeSunTransparencyFadeRate))
-					* 30 * (HorizonElevationSunsetDifference10Ratio3 + 0.55
-						- AltitudeSunTransparencyFadeRate - SunsetFOVTransparencyScale)),
-				0,
-				1
-			)
-			SunTexture:TweenSize(
-				UDim2.new(
-					0, 100 + HorizonElevationSunsetDifference10Ratio * 900*SunBrightness*(-((Camera.FieldOfView-70)/200)+1),
-					0, 100 + HorizonElevationSunsetDifference10Ratio * 900*SunBrightness*(-((Camera.FieldOfView-70)/200)+1)
-				),
-				Enum.EasingDirection.Out,
-				Enum.EasingStyle.Quad,
-				0.1,
-				true
-			)
-			SunTexture2.ImageTransparency = 1 - math.clamp(
-				((2 - (2.6111111111111 * AltitudeSunTransparencyFadeRate))
-					* 30 * (HorizonElevationSunsetDifference10Ratio1_5 + 0.55
-						- AltitudeSunTransparencyFadeRate - SunsetFOVTransparencyScale)),
-				0,
-				1
-			)
-			SunTexture2:TweenSize(
-				UDim2.new(
-					0, ((2.5*Camera.ViewportSize.Y*ApparentDiameter/31.983)/Camera.FieldOfView)*SunBrightness,
-					0, ((2.5*Camera.ViewportSize.Y*ApparentDiameter/31.9)/Camera.FieldOfView)*SunBrightness
-				),
-				Enum.EasingDirection.Out,
-				Enum.EasingStyle.Quad,
-				0.1,
-				true
-			)
-			local SunApparentDiameterRatio = script.Customize.EnableSun.SunApparentDiameter.Value / 31.983
-			Sun3D.SunsetLight.Light.ImageTransparency = HorizonElevationSunsetDifference10Ratio
-			Sun3D.Mesh.Scale = Vector3.new(
-				12.25,
-				10.5 + (1.75 * HorizonElevationSunsetDifference10Ratio),
-				12.25
-			) * SunApparentDiameterRatio
-			if IsObstructed == true then
-				SunTexture:TweenSize(UDim2.new(0,-5,0,-5),Enum.EasingDirection.Out,Enum.EasingStyle.Quad,0.1,true)
-				SunTexture2:TweenSize(UDim2.new(0,-5,0,-5),Enum.EasingDirection.Out,Enum.EasingStyle.Quad,0.1,true)
-			elseif SunElevation <= HorizonElevation then
-				SunTexture:TweenSize(UDim2.new(0,-5,0,-5),Enum.EasingDirection.Out,Enum.EasingStyle.Quad,0.1,true)
-				SunTexture2:TweenSize(UDim2.new(0,-5,0,-5),Enum.EasingDirection.Out,Enum.EasingStyle.Quad,0.1,true)
-			elseif HorizonElevation ~= HorizonElevation then
-				SunTexture:TweenSize(UDim2.new(0,-5,0,-5),Enum.EasingDirection.Out,Enum.EasingStyle.Quad,0.1,true)
-				SunTexture2:TweenSize(UDim2.new(0,-5,0,-5),Enum.EasingDirection.Out,Enum.EasingStyle.Quad,0.1,true)
-			end
-			SunTexture3.Size = UDim2.new(0, SunTexture.Size.X.Offset / 2, 0, SunTexture.Size.Y.Offset / 2)
-			SunTexture3.ImageColor3 = Color3.new(
-				SunTexture.ImageColor3.R * 1.5,
-				SunTexture.ImageColor3.G * 1.5,
-				SunTexture.ImageColor3.B * 1.5
-			)
-			SunTexture3.Position = SunTexture.Position
-			SunTexture3.Rotation = SunTexture.Rotation
-			SunTexture3.ImageTransparency = SunTexture.ImageTransparency
-		else
-			SunTexture:TweenSize(UDim2.new(0,-5,0,-5),Enum.EasingDirection.Out,Enum.EasingStyle.Quad,0.1,true)
-			SunTexture2:TweenSize(UDim2.new(0,-5,0,-5),Enum.EasingDirection.Out,Enum.EasingStyle.Quad,0.1,true)
-			SunTexture3.Size = SunTexture.Size
-		end
-
-		if SunTexture.Size.X.Offset <= 0 then -- To ensure the Sun is completely invisible when player is facing away from the Sun.
-			SunTexture.Visible = false
-			SunTexture2.Visible = false
-			SunTexture3.Visible = false
-		else
-			SunTexture.Visible = true
-			SunTexture2.Visible = true
-			SunTexture3.Visible = true
-		end
-
-		-- Sun Temperature
-		local TempValue = math.clamp(script.Customize.EnableSun.SunTemp.Value, 2001, math.huge)
-		if script.Customize.EnableSunsetScattering.Value == false then
-			TempValue = script.Customize.EnableSun.SunTemp.Value
-		end
-		local Temp = (TempValue + 1095) / 100
-		if TempValue <= 0 then
-			SunR = 255
-			SunG = 76
-			SunB = 0
-		elseif TempValue > 0 and TempValue <= 1000 then
-			SunR = 255
-			SunG = 99.4708025861*math.log(Temp)-161.1195681661
-			SunB = 0
-		elseif TempValue > 1000 and TempValue <= 2000 then
-			SunR = 255
-			SunG = 104.49216199393888*math.log(Temp-2)-0.44596950469579133*Temp-155.25485562709179
-			SunB = 0
-		elseif TempValue > 2000 and TempValue <= 6600 then
-			SunR = 255
-			SunG = 104.49216199393888*math.log(Temp-2)-0.44596950469579133*Temp-155.25485562709179
-			SunB = 115.67994401066147*math.log(Temp-10)+0.8274096064007395*Temp-254.76935184120902
-		elseif TempValue > 6600 and TempValue <= 40000 then
-			SunR = -40.25366309332127*math.log(Temp-55)+0.114206453784165*Temp+351.97690566805693
-			SunG = -28.0852963507957*math.log(Temp-50)+0.07943456536662342*Temp+325.4494125711974
-			SunB = 255
-		elseif TempValue > 40000 then
-			SunR = 162
-			SunG = 192
-			SunB = 255
-		end
-
-		local H2 = (3*(2^(-x/500000)))
-		if script.Customize.EnableSunsetScattering.Value then
-			local IntermediateColor = Color3.new(
-				math.clamp(((((SunR-math.clamp(SunExtinctionColorIntermediateR, 0, SunR - 1))/(H2*(2^(-x/500000))))
-					*(math.clamp(HorizonElevationSunsetDifference10, H2, H2 * 2)-H2))+SunExtinctionColorIntermediateR)/255, 0, 1),
-				math.clamp(((((SunG-math.clamp(SunExtinctionColorIntermediateG, 0, SunG - 1))/(H2*(2^(-x/500000))))
-					*(math.clamp(HorizonElevationSunsetDifference10, H2, H2 * 2)-H2))+SunExtinctionColorIntermediateG)/255, 0, 1),
-				math.clamp(((((SunB-math.clamp(SunExtinctionColorIntermediateB, 0, SunB - 1))/(H2*(2^(-x/500000))))
-					*(math.clamp(HorizonElevationSunsetDifference10, H2, H2 * 2)-H2))+SunExtinctionColorIntermediateB)/255, 0, 1)
-			)
-			SunTexture.ImageColor3 = Color3.new(
-				(((((IntermediateColor.R*255)-SunExtinctionColorR)/(6*(2^(-x/500000))))*HorizonElevationSunsetDifference10)+SunExtinctionColorR)/255,
-				(((((IntermediateColor.G*255)-SunExtinctionColorG)/(6*(2^(-x/500000))))*HorizonElevationSunsetDifference10)+SunExtinctionColorG)/255,
-				(((((IntermediateColor.B*255)-SunExtinctionColorB)/(6*(2^(-x/500000))))*HorizonElevationSunsetDifference10)+SunExtinctionColorB)/255
-			)
-		else
-			SunTexture.ImageColor3 = Color3.new(
-				(((SunR-SunExtinctionColorR)/(6*(2^(-x/500000)))*HorizonElevationSunsetDifference10)+SunExtinctionColorR)/255,
-				((((SunG-SunExtinctionColorG)/(6*(2^(-x/500000))))*HorizonElevationSunsetDifference10)+SunExtinctionColorG)/255,
-				((((SunB-SunExtinctionColorB)/(6*(2^(-x/500000))))*HorizonElevationSunsetDifference10)+SunExtinctionColorB)/255
-			)
-		end
-		SunTexture.Rotation = -(screenPosition.x-Camera.ViewportSize.X/2)/100 -- Sunshine rotation as a function of the screen's x-axis.
-
-		-- 3D SUNSET
-
-		if game.Lighting.ClockTime < 12 then
-			Sun3D.SunsetLight.ExtentsOffsetWorldSpace = Vector3.new(5, 0, 0)
-		else
-			Sun3D.SunsetLight.ExtentsOffsetWorldSpace = Vector3.new(-5, 0, 0)
-		end
-
-		local AboveHorizon = HorizonElevationSunsetDifference > -2
-		if x > 5000 then
-			AboveHorizon = HorizonElevationSunsetDifference > 0
-		elseif x > 1000 and x <= 5000 then
-			AboveHorizon = HorizonElevationSunsetDifference > -0.5
-		end
-		if script.Customize.EnableSun.Value then
-			if AboveHorizon and HorizonElevationSunsetDifference < H1 then
-				Sun3D.Position = Camera.CFrame.Position
-				Sun3D.Mesh.Offset = Vector3.new(70000, 70000, 70000) * SunDirectionV
-			else
-				Sun3D.Position = Vector3.new(0, -200000, 0)
-				Sun3D.Mesh.Offset = Sun3D.Position
-			end
-			Sun3D.SunsetLight.StudsOffsetWorldSpace = Sun3D.Mesh.Offset
-			Sun3D.SunsetLight.Brightness = math.clamp(400 - (x / 28), 40, 400)
-			Sun3D.SunsetLight.Size = UDim2.new(10000 * SunBrightness, 0, math.clamp((-x / 16) + 10000, 4000, 10000) * SunBrightness, 0)
-			Sun3D.SunsetLight.Light.ImageColor3 = script.Customize.EnableSun.ThreeDimensionalSunAtmosphericExtinctionColor.Value
-		else
-			Sun3D.Position = Camera.CFrame.Position - Vector3.new(0, 100000, 0)
-		end
-	end)
+function AtmoSphere:Update()
+	
 end
